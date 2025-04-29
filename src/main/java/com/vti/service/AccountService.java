@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import com.vti.entity.Account;
+import com.vti.entity.AccountStatus;
 import com.vti.entity.Department;
 import com.vti.entity.Position;
 import com.vti.entity.RegistrationUserToken;
@@ -147,8 +148,29 @@ public class AccountService implements IAccountService {
 		registrationUserTokenRepository.save(registrationUserToken);
 
 //		Gửi thông tin xác nhận qua Email: dao.nq254@gmail.com
+
 		eventPublisher.publishEvent(new OnSendRegistrationUserConfirmViaEmailEvent(account.getEmail()));
 
+	}
+
+	@Override
+	public Account getAccountByEmail(String email) {
+		return accountRepository.findByEmail(email);
+	}
+
+	@Override
+	public void activeUser(String token) {
+// Tìm Account từ Token
+		RegistrationUserToken registrationUserToken = registrationUserTokenRepository.findByToken(token);
+		Account account = registrationUserToken.getAccount();
+// 	Cập nhật Status của Account = Active
+		account.setStatus(AccountStatus.ACTIVE);
+//		Lưu lại thông tin
+		accountRepository.save(account);
+
+//		Xóa token tương ứng với Account vừa Active
+
+		registrationUserTokenRepository.deleteById(registrationUserToken.getId());
 	}
 
 }

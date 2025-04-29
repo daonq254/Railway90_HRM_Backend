@@ -169,6 +169,14 @@ public class Account implements Serializable {
 		this.position = position;
 	}
 
+	public AccountStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(AccountStatus status) {
+		this.status = status;
+	}
+
 	@Override
 	public String toString() {
 		return "Account [id=" + id + ", email=" + email + ", username=" + username + ", fullname=" + fullname

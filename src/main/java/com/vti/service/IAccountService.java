@@ -23,4 +23,8 @@ public interface IAccountService extends UserDetailsService {
 
 	void createAccountRegister(AccountFormForCreatingRegister form);
 
+	Account getAccountByEmail(String email);
+
+	void activeUser(String token);
+
 }
